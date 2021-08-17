@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_const_constructors
 
-import 'package:flutter/material.dart';  
-import 'package:provider/provider.dart'; 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../widgets/product_item.dart';
 import '../providers/products_provider.dart';
 
@@ -13,7 +13,11 @@ class ProductGrid extends StatelessWidget {
     return GridView.builder(
       itemCount: products.length,
       padding: EdgeInsets.all(10),
-      itemBuilder: (ctx, i) => ProductItem(products[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
+        //No ChangeNotifierProvider que já foi criado usar value e não create 
+        value: products[i],
+        child: ProductItem(),
+      ),
       //quantidade fixa de elementos na linha
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
