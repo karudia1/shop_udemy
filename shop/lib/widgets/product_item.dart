@@ -8,7 +8,10 @@ import '../models/product_model.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Product product = Provider.of<Product>(context);
+    //Propósito do listen é continuar "ouvindo as mudanças".
+    //Ele deve ficar false quando você não quer "ficar" sabendo das mudanças feitas
+    //Ex. Quando usa atributos finais
+    final Product product = Provider.of<Product>(context, listen: true);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
