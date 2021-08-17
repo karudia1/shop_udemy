@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
-import './product.dart';
+import '../models/product_model.dart'; 
 import '../data/dummy_data.dart';
 
 class Products with ChangeNotifier {
 
-  List<Product> _items = DUMMY_PRODUCTS;
+  List<Product> _items = DUMMY_PRODUCTS.cast<Product>();
 
   List<Product> get items  => [ ..._items ];
 

@@ -1,7 +1,7 @@
 
  // ignore_for_file: camel_case_types
  
-class products {
+class Product {
   final String id;
   final String title;
   final String description;
@@ -9,7 +9,7 @@ class products {
   final String imageUrl;
   bool isFavorite;
 
-  products({
+  Product({
     required this.id,
     required this.title,
     required this.description,

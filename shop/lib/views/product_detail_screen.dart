@@ -1,8 +1,8 @@
 // ignore_for_file: override_on_non_overriding_member, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:shop/providers/counter_provider.dart';
-import 'package:shop/providers/product.dart';
+import '../models/product_model.dart';
+import 'package:shop/providers/counter_provider.dart'; 
 
 class ProductDetailScreen extends StatefulWidget {
   @override
