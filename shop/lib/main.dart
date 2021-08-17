@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import './utils/app_routes.dart';
 import './views/product_detail_screen.dart';
 import './views/products_overview_screen.dart';
-import './providers/products.dart';
+import 'providers/products_provider.dart';
 
 void main() => runApp(MyApp());
 
