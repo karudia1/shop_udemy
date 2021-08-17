@@ -22,7 +22,7 @@ class ProductOverviewScreen extends StatelessWidget {
         body: GridView.builder(
           itemCount: loadedProducts.length,
           padding: EdgeInsets.all(10),
-          itemBuilder: (ctx, i) => Text(loadedProducts[i].title),
+          itemBuilder: (ctx, i) => ProductItem(loadedProducts[i]),
           //quantidade fixa de elementos na linha
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,

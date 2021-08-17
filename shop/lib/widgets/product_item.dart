@@ -1,16 +1,16 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../utils/app_routes.dart'; 
+import '../utils/app_routes.dart';
+import '../models/product_model.dart';
 
 class ProductItem extends StatelessWidget {
-  
+  final Product product;
 
-  ProductItem();
+  ProductItem(this.product);
 
   @override
   Widget build(BuildContext context) {
-    var product;
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -19,7 +19,7 @@ class ProductItem extends StatelessWidget {
           child: GestureDetector(
             onTap: () {
               Navigator.of(context).pushNamed(
-                AppRoutes.PRODUCT_DETAIL, 
+                AppRoutes.PRODUCT_DETAIL,
                 arguments: null,
               );
               /*  Navigator.of(context).push(
