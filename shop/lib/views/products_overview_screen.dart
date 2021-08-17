@@ -1,7 +1,11 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, avoid_print, constant_identifier_names, unused_field
 
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/providers/cart.dart';
+import 'package:shop/utils/app_routes.dart';
 import '../widgets/product_grid.dart';
+import '../widgets/badge.dart';
 
 enum FilterOptions {
   Favorite,
@@ -22,6 +26,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Minha loja'),
+          backgroundColor: Colors.purple,
           actions: <Widget>[
             PopupMenuButton(
               onSelected: (FilterOptions selectedValue) {
@@ -45,8 +50,19 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
                 )
               ],
             ),
+            Consumer<Cart>(
+              builder: (ctx, cart, _) => Badge(
+                value: cart.itemsCount.toString(),
+                child: IconButton(
+                  icon: Icon(Icons.shopping_cart),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(AppRoutes.CART);
+                  }, //precisa de parametro
+                ),
+              ),
+            ),
           ],
-          backgroundColor: Theme.of(context).primaryColor,
+         
         ),
         body: ProductGrid(_showFavoriteOnly));
   }

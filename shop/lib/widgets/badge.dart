@@ -1,16 +1,16 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors, prefer_if_null_operators
 
 import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
   final Widget child;
   final String value;
-  final Color color;
+  final Color? color;
 
   Badge({
     required this.child,
     required this.value,
-    required this.color,
+    this.color,
   });
 
   @override
@@ -26,7 +26,7 @@ class Badge extends StatelessWidget {
             padding: EdgeInsets.all(2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-             // color: color != null ? color : Theme.of(context).accentColor,
+              color: color != null ? color : Theme.of(context).colorScheme.secondary,
             ),
             constraints: BoxConstraints(
               minHeight: 16,

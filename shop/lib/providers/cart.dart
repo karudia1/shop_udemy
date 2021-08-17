@@ -30,6 +30,7 @@ class Cart with ChangeNotifier {
     return _items.length;
   }
 
+  //Pega o preço e a quantidade e adiciona no total
   double get totalAmount {
     double total = 0.0;
     _items.forEach((key, cartItem) {
