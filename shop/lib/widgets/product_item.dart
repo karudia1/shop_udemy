@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import '../utils/app_routes.dart';
-import '../models/product_model.dart';
+import '../models/product_model.dart'; 
 
 class ProductItem extends StatelessWidget {
   final Product product;
@@ -20,7 +20,7 @@ class ProductItem extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pushNamed(
                 AppRoutes.PRODUCT_DETAIL,
-                arguments: null,
+                arguments: product,
               );
               /*  Navigator.of(context).push(
                 MaterialPageRoute(
