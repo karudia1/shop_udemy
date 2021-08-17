@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
-import './product.dart';
+import '../providers/product_model.dart';
 
 class CartItem {
   final String id;
@@ -62,7 +62,6 @@ class Cart with ChangeNotifier {
         ),
       );
     }
-
     notifyListeners();
   }
 

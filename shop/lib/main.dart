@@ -6,15 +6,26 @@ import './utils/app_routes.dart';
 import './views/product_detail_screen.dart';
 import './views/products_overview_screen.dart';
 import 'providers/products_provider.dart';
+import 'providers/cart.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      //Products() cria um ChangeNotifierProvider
-      create: (_) => Products(),
+    //lista de Provider
+    return MultiProvider(
+      providers: [
+        //Products() cria um ChangeNotifierProvider
+        ChangeNotifierProvider(
+          create: (_) => Products(),
+        ),
+        //Cart() cria um ChangeNotifierProvider
+        ChangeNotifierProvider(
+          create: (_) => Cart(),
+        ),
+      ],
+
       child: MaterialApp(
         title: 'Minha Loja',
         theme: ThemeData(

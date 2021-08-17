@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_final_fields
 
 import 'package:flutter/material.dart';
-import '../models/product_model.dart';
+import 'product_model.dart';
 import '../data/dummy_data.dart';
 
 class Products with ChangeNotifier {

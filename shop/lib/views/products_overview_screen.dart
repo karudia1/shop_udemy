@@ -1,8 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, avoid_print, constant_identifier_names, unused_field
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/products_provider.dart';
+import 'package:flutter/material.dart'; 
 import '../widgets/product_grid.dart';
 
 enum FilterOptions {
