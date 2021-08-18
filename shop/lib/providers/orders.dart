@@ -12,7 +12,7 @@ class Order {
   final List<CartItem> products;
   final DateTime date;
 
-  Order( {
+  Order({
     required this.id,
     this.total = 0,
     required this.products,
@@ -20,18 +20,36 @@ class Order {
   });
 }
 
+//Controla todos os pedidos
 class Orders with ChangeNotifier {
   List<Order> _items = [];
 
   List<Order> get items {
-    return [..._items];
+    return [..._items]; //operador sprade que clona a lista
   }
 
   int get itemsCount {
     return _items.length;
   }
 
-  void addOrder(Cart cart) {
+  //Método passando parâmetro por parâmetro
+  void addOrder(List<CartItem> products, double total) {
+    // Outra forma de pegar o total sem ser por passagem de parametro
+    //double totalProduto = products.fold(0.0, (t, i) => t + (i.price * i.quantity));
+
+    _items.insert(
+      0,
+      Order(
+        id: Random().nextDouble().toString(),
+        products: products,
+        date: DateTime.now(),
+      ),
+    );
+
+    notifyListeners();
+  }
+
+  void addOrderCart(Cart cart) {
     _items.insert(
       0,
       Order(

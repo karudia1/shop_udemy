@@ -10,7 +10,7 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Bem vindo Usuário!'),
+            title: Text('Bem vindo usuário!'),
             automaticallyImplyLeading: false,
           ),
           Divider(),
@@ -18,6 +18,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Loja'),
             onTap: () {
+              //Substitui a rota atual
               Navigator.of(context).pushReplacementNamed(
                 AppRoutes.HOME,
               );

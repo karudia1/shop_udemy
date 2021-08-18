@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
 
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../providers/cart.dart';
 
 class CartItemWidget extends StatelessWidget {
@@ -14,7 +15,6 @@ class CartItemWidget extends StatelessWidget {
       key: ValueKey(cartItem.id),
       background: Container(
         color: Theme.of(context).errorColor,
-        
         child: Icon(
           Icons.delete,
           color: Colors.white,
@@ -29,8 +29,8 @@ class CartItemWidget extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (_) {
-      /*   Provider.of<Cart>(context, listen: false)
-            .removeItem(cartItem.productId); */
+        Provider.of<Cart>(context, listen: false)
+            .removeItem(cartItem.productId);
       },
       child: Card(
         margin: EdgeInsets.symmetric(
