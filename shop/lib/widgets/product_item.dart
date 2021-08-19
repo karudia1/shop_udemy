@@ -53,9 +53,30 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: Icon(Icons.shopping_cart),
+            //accentColor
             color: Theme.of(context).colorScheme.secondary,
             onPressed: () {
-              cart.addItem(product);  
+              //impede que várias bar apareçam ao adicionar várias quantidades do mesmo item
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+              //acessa o AppDrawer de ProductOverviewScreen
+              //Scaffold.of(context).openDrawer();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Produto adicionado com sucesso!',
+                    //textAlign: TextAlign.center,
+                  ),
+                  duration: const Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: 'DESFAZER',
+                    onPressed: () {
+                      cart.removeSigleItem(product.id);
+                    },
+                  ),
+                ),
+              );
+              cart.addItem(product);
             },
           ),
         ),
