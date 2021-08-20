@@ -6,7 +6,7 @@ import 'package:shop/providers/cart.dart';
 import '../utils/app_routes.dart';
 import '../providers/product_model.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductGridItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Propósito do listen é continuar "ouvindo as mudanças".
