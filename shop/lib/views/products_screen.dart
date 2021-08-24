@@ -1,24 +1,22 @@
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../widgets/app_drawer.dart';
-import '../providers/products.dart';
-import '../widgets/product_item.dart';
-import '../utils/app_routes.dart';
+import 'package:shop/providers/products_provider.dart';
+import 'package:shop/utils/app_routes.dart';
+import 'package:shop/widgets/app_drawer.dart';
+import 'package:shop/widgets/product_item.dart';
 
 class ProductsScreen extends StatelessWidget {
-
-  Future<void> _refreshProducts(BuildContext context) {
-    return Provider.of<Products>(context, listen: false).loadProducts();
-  }
-
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<Products>(context);
     final products = productsData.items;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Gerenciar Produtos'),
+        backgroundColor: Colors.purple,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add),
@@ -31,18 +29,15 @@ class ProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: RefreshIndicator(
-        onRefresh: () => _refreshProducts(context),
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: ListView.builder(
-            itemCount: productsData.itemsCount,
-            itemBuilder: (ctx, i) => Column(
-              children: <Widget>[
-                ProductItem(products[i]),
-                Divider(),
-              ],
-            ),
+      body: Padding(
+        padding: EdgeInsets.all(8),
+        child: ListView.builder(
+          itemCount: productsData.itemsCount,
+          itemBuilder: (ctx, i) => Column(
+            children: <Widget>[
+              ProductItem(products[i]),
+              Divider(),
+            ],
           ),
         ),
       ),
