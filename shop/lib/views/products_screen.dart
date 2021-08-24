@@ -10,7 +10,7 @@ import 'package:shop/widgets/product_item.dart';
 class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final productsData = Provider.of<Products>(context);
+    final productsData = Provider.of<ProductList>(context);
     final products = productsData.items;
 
     return Scaffold(

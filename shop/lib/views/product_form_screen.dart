@@ -3,7 +3,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/providers/product_model.dart';
+import 'package:shop/providers/products_provider.dart';
 
 class ProductFormScreen extends StatefulWidget {
   const ProductFormScreen({Key? key}) : super(key: key);
@@ -51,10 +53,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     return isValidUrl && endsWithFile;
   }
 
-  void _saveForm() {
+  void _submitForm() {
     var isValid = _form.currentState?.validate() ?? false;
 
-    if (isValid) {
+    if (!isValid) {
       return;
     }
 
@@ -67,6 +69,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       price: double.parse(_formData['price'].toString()),
       imageUrl: _formData['imageUrl'].toString(),
     );
+
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).addProduct(newProduct);
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -79,7 +88,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           IconButton(
             icon: Icon(Icons.save),
             onPressed: () {
-              _saveForm();
+              _submitForm();
             },
           )
         ],
@@ -121,8 +130,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     //Vai para o próximo item
                     FocusScope.of(context).requestFocus(_descriptionFocusNode);
                   },
-                  onSaved: (price) => 
-                    _formData['price'] = double.parse(price!),
+                  onSaved: (price) => _formData['price'] = double.parse(price!),
                   // _formData['price'] = double.parse(price ?? '0'),
                   validator: (_price) {
                     final priceString = _price ?? '';
@@ -161,7 +169,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       focusNode: _imageUrlFocusNode,
                       controller: _imageUrlController,
                       onFieldSubmitted: (_) {
-                        _saveForm();
+                        _submitForm();
                       },
                       onSaved: (value) => _formData['imageUrl'] = value!,
                       validator: (_imageUrl) {

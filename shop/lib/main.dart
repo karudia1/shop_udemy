@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [
         //Products() cria um ChangeNotifierProvider
         ChangeNotifierProvider(
-          create: (_) => Products(),
+          create: (_) => ProductList(),
         ),
         //Cart() cria um ChangeNotifierProvider
         ChangeNotifierProvider(

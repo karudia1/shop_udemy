@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'product_model.dart';
 import '../data/dummy_data.dart';
 
-class Products with ChangeNotifier {
+class ProductList with ChangeNotifier {
   List<Product> _items = DUMMY_PRODUCTS.cast<Product>();
 
   List<Product> get items => [..._items];
