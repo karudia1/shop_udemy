@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unused_field, prefer_collection_literals, prefer_final_fields, avoid_print, unused_local_variable
 
-import 'package:flutter/material.dart'; 
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:shop/providers/product_model.dart';
 
 class ProductFormScreen extends StatefulWidget {
   const ProductFormScreen({Key? key}) : super(key: key);
@@ -34,22 +37,36 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   void _updateImage() {
-    setState(() {});
+    if (isValidImageUrl(_imageUrlController.text)) {
+      setState(() {});
+    }
+  }
+
+  bool isValidImageUrl(String url) {
+    bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
+    bool endsWithFile = url.toLowerCase().endsWith('.png') ||
+        url.toLowerCase().endsWith('jpg') ||
+        url.toLowerCase().endsWith('.jpeg');
+
+    return isValidUrl && endsWithFile;
   }
 
   void _saveForm() {
+    var isValid = _form.currentState?.validate() ?? false;
+
+    if (isValid) {
+      return;
+    }
+
     _form.currentState!.save();
 
-   /*  final newProduct = Product(
+    final newProduct = Product(
       id: Random().nextDouble().toString(),
       title: _formData['title'].toString(),
       description: _formData['description'].toString(),
       price: double.parse(_formData['price'].toString()),
       imageUrl: _formData['imageUrl'].toString(),
     );
-    print(newProduct.id);
-    print(newProduct.title);
-    print(newProduct.price); */
   }
 
   @override
@@ -74,7 +91,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Título'),
+                decoration: InputDecoration(labelText: 'Nome'),
                 textInputAction: TextInputAction.next,
                 //sempre que o usuário chamar next
                 onFieldSubmitted: (_) {
@@ -82,20 +99,39 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
                 onSaved: (value) => _formData['titulo'] = value!,
+                validator: (_name) {
+                  final name = _name ?? '';
+                  if (name.trim().isEmpty) {
+                    return 'Nome é obrigatório';
+                  }
+                  /*  if (name.trim().length < 3) {
+                    return 'Informe um nome com o mínimo de três letras';
+                  } */
+                  return null;
+                },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Preço'),
-                textInputAction: TextInputAction.next,
-                focusNode: _priceFocusNode,
-                keyboardType: TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                onFieldSubmitted: (_) {
-                  //Vai para o próximo item
-                  FocusScope.of(context).requestFocus(_descriptionFocusNode);
-                },
-                onSaved: (value) => _formData['price'] = double.parse(value!),
-              ),
+                  decoration: InputDecoration(labelText: 'Preço'),
+                  textInputAction: TextInputAction.next,
+                  focusNode: _priceFocusNode,
+                  keyboardType: TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  onFieldSubmitted: (_) {
+                    //Vai para o próximo item
+                    FocusScope.of(context).requestFocus(_descriptionFocusNode);
+                  },
+                  onSaved: (price) => 
+                    _formData['price'] = double.parse(price!),
+                  // _formData['price'] = double.parse(price ?? '0'),
+                  validator: (_price) {
+                    final priceString = _price ?? '';
+                    final price = double.tryParse(priceString) ?? -1;
+
+                    if (price <= 0) {
+                      return 'Informe um preço válido.';
+                    }
+                  }),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Descrição'),
                 maxLines: 3,
@@ -103,6 +139,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 textInputAction: TextInputAction.next,
                 focusNode: _descriptionFocusNode,
                 onSaved: (value) => _formData['description'] = value!,
+                validator: (_description) {
+                  final description = _description ?? '';
+                  if (description.trim().isEmpty) {
+                    return 'Descrição é obrigatório';
+                  }
+                  if (description.trim().length < 10) {
+                    return 'Descrição precisa no mínimo de 10 letras';
+                  }
+                  return null;
+                },
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -118,6 +164,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                         _saveForm();
                       },
                       onSaved: (value) => _formData['imageUrl'] = value!,
+                      validator: (_imageUrl) {
+                        final imageUrl = _imageUrl ?? '';
+                        if (!isValidImageUrl(imageUrl)) {
+                          return 'Informe uma URL válida';
+                        }
+                      },
                     ),
                   ),
                   Container(
