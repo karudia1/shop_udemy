@@ -1,40 +1,44 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/cart.dart';
+import 'package:shop/models/cart.dart';
+import 'package:shop/models/cart_item.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem cartItem;
 
-  CartItemWidget(this.cartItem);
+  const CartItemWidget(
+    this.cartItem, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
       key: ValueKey(cartItem.id),
+      direction: DismissDirection.endToStart,
       background: Container(
-        color: Theme.of(context).errorColor,
+        color: Theme.of(context).errorColor, 
         child: Icon(
           Icons.delete,
           color: Colors.white,
           size: 40,
         ),
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
-        margin: EdgeInsets.symmetric(
+        padding: const EdgeInsets.only(right: 20),
+        margin: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 4,
         ),
       ),
-      direction: DismissDirection.endToStart,
       confirmDismiss: (_) {
-        return showDialog(
+        return showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: Text('Tem certeza?'),
-            content: Text('Quer remover o carrinho'),
-            actions: <Widget>[
+            title: Text('Tem Certeza?'),
+            content: Text('Quer remover o item do carrinho?'),
+            actions: [
               TextButton(
                 child: Text('Não'),
                 onPressed: () {
@@ -44,7 +48,7 @@ class CartItemWidget extends StatelessWidget {
               TextButton(
                 child: Text('Sim'),
                 onPressed: () {
-                   Navigator.of(ctx).pop(true);
+                  Navigator.of(ctx).pop(true);
                 },
               ),
             ],
@@ -52,26 +56,28 @@ class CartItemWidget extends StatelessWidget {
         );
       },
       onDismissed: (_) {
-        Provider.of<Cart>(context, listen: false)
-            .removeItem(cartItem.productId);
+        Provider.of<Cart>(
+          context,
+          listen: false,
+        ).removeItem(cartItem.productId);
       },
       child: Card(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: 15,
           vertical: 4,
         ),
         child: Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: ListTile(
             leading: CircleAvatar(
               child: Padding(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: FittedBox(
                   child: Text('${cartItem.price}'),
                 ),
               ),
             ),
-            title: Text(cartItem.title),
+            title: Text(cartItem.name),
             subtitle: Text('Total: R\$ ${cartItem.price * cartItem.quantity}'),
             trailing: Text('${cartItem.quantity}x'),
           ),

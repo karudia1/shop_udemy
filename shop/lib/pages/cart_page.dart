@@ -1,12 +1,14 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/orders.dart';
-import '../providers/cart.dart';
+import '../models/order_list.dart';
 import '../widgets/cart_item_widget.dart';
+import '../models/cart.dart'; 
 
-class CartScreen extends StatelessWidget {
+class CartPage extends StatelessWidget {
+  const CartPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Cart cart = Provider.of(context);
@@ -20,7 +22,10 @@ class CartScreen extends StatelessWidget {
       body: Column(
         children: <Widget>[
           Card(
-            margin: EdgeInsets.all(25),
+            margin: const EdgeInsets.symmetric(
+              horizontal: 15,
+              vertical: 25,
+            ),
             child: Padding(
               padding: EdgeInsets.all(10),
               child: Row(
@@ -30,15 +35,13 @@ class CartScreen extends StatelessWidget {
                     'Total',
                     style: TextStyle(fontSize: 20),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
+                  SizedBox(width: 10),
                   Chip(
                     label: Text(
-                      'R\$${cart.totalAmount}',
+                      'R\$${cart.totalAmount.toStringAsFixed(2)}',
                       style: TextStyle(
                         color:
-                            Theme.of(context).primaryTextTheme.headline1!.color,
+                            Theme.of(context).primaryTextTheme.headline1?.color,
                       ),
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
@@ -50,12 +53,9 @@ class CartScreen extends StatelessWidget {
                       primary: Theme.of(context).primaryColor,
                     ),
                     onPressed: () {
-                      /*  Provider.of<Orders>(context, listen: false).addOrder(
-                        cartItens,
-                        cart.totalAmount,
-                      ); */
-                      Provider.of<Orders>(context, listen: false)
-                          .addOrderCart(cart);
+                      Provider.of<OrderList>(context, listen: false)
+                          .addOrder(cart);
+
                       cart.clear();
                     },
                   ),
@@ -63,15 +63,15 @@ class CartScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: 10,
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: cart.itemsCount,
               itemBuilder: (ctx, i) => CartItemWidget(cartItens[i]),
             ),
           ),
+          /* SizedBox(
+            height: 10,
+          ),  */
         ],
       ),
     );

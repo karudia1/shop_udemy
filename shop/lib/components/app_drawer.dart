@@ -1,16 +1,18 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../utils/app_routes.dart';
+import 'package:shop/utils/app_routes.dart';
 
 class AppDrawer extends StatelessWidget {
+  const AppDrawer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
-        children: <Widget>[
+        children: [
           AppBar(
-            title: Text('Bem vindo usuário!'),
+            title: Text('Bem vindo Uusário!'),
             automaticallyImplyLeading: false,
             backgroundColor: Colors.purple,
           ),
@@ -19,7 +21,6 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.shop),
             title: Text('Loja'),
             onTap: () {
-              //Substitui a rota atual
               Navigator.of(context).pushReplacementNamed(
                 AppRoutes.HOME,
               );
@@ -38,7 +39,7 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.edit),
-            title: Text('Gerenciar produtos'),
+            title: Text('Gerenciar Produtos'),
             onTap: () {
               Navigator.of(context).pushReplacementNamed(
                 AppRoutes.PRODUCTS,

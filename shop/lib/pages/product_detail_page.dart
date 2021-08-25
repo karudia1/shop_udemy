@@ -1,9 +1,13 @@
-// ignore_for_file: override_on_non_overriding_member, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, avoid_print, sized_box_for_whitespace, prefer_const_constructors
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import '../providers/product_model.dart';
+import '../models/product.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailPage extends StatelessWidget {
+  const ProductDetailPage({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Product product =
@@ -11,7 +15,7 @@ class ProductDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(product.title),
+        title: Text(product.name),
         backgroundColor: Colors.purple,
       ),
       body: SingleChildScrollView(

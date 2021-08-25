@@ -1,15 +1,17 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/orders.dart';
-import 'package:shop/widgets/order_widget.dart';
+import '../models/order_list.dart';
+import '../widgets/order_widget.dart';
 import '../widgets/app_drawer.dart';
 
-class OrderScreen extends StatelessWidget {
+class OrdersPage extends StatelessWidget {
+  const OrdersPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final Orders orders = Provider.of(context);
+    final OrderList orders = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,15 +1,17 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors_in_immutables, sized_box_for_whitespace, prefer_const_constructors
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop/providers/product_model.dart';
-import 'package:shop/providers/products_provider.dart';
+import 'package:shop/models/product.dart';
+import 'package:shop/models/product_list.dart';
 import 'package:shop/utils/app_routes.dart';
 
 class ProductItem extends StatelessWidget {
   final Product product;
-
-  ProductItem(this.product);
+  const ProductItem(
+    this.product, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +19,11 @@ class ProductItem extends StatelessWidget {
       leading: CircleAvatar(
         backgroundImage: NetworkImage(product.imageUrl),
       ),
-      title: Text(product.title),
+      title: Text(product.name),
       trailing: Container(
         width: 100,
         child: Row(
-          children: <Widget>[
+          children: [
             IconButton(
               icon: Icon(Icons.edit),
               color: Theme.of(context).primaryColor,
@@ -39,7 +41,7 @@ class ProductItem extends StatelessWidget {
                 showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(
-                    title: Text('Excluir produto'),
+                    title: Text('Excluir Produto'),
                     content: Text('Tem certeza?'),
                     actions: [
                       TextButton(
@@ -52,16 +54,14 @@ class ProductItem extends StatelessWidget {
                       ),
                     ],
                   ),
-                ).then(
-                  (value) {
-                    if (value ?? false) {
-                      Provider.of<ProductList>(
-                        context,
-                        listen: false,
-                      ).removeProduct(product);
-                    }
-                  },
-                );
+                ).then((value) {
+                  if (value ?? false) {
+                    Provider.of<ProductList>(
+                      context,
+                      listen: false,
+                    ).removeProduct(product);
+                  }
+                });
               },
             ),
           ],
