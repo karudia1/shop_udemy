@@ -11,10 +11,10 @@ class ProductFormScreen extends StatefulWidget {
   const ProductFormScreen({Key? key}) : super(key: key);
 
   @override
-  _ProductFormScreenState createState() => _ProductFormScreenState();
+  _ProductFormPageState createState() => _ProductFormPageState();
 }
 
-class _ProductFormScreenState extends State<ProductFormScreen> {
+class _ProductFormPageState extends State<ProductFormScreen> {
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
@@ -27,6 +27,28 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   void initState() {
     super.initState();
     _imageUrlFocusNode.addListener(_updateImage);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      //esta vindo de uma tela de edição ou exclusão
+      if (arg != null) {
+        final product = arg as Product;
+
+        _formData['id'] = product.id;
+        _formData['title'] = product.title;
+        _formData['description'] = product.description;
+        _formData['price'] = product.price;
+        _formData['imageUrl'] = product.imageUrl;
+
+        _imageUrlController.text = product.imageUrl;
+      }
+    }
   }
 
   @override
@@ -62,18 +84,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _form.currentState!.save();
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      title: _formData['title'].toString(),
-      description: _formData['description'].toString(),
-      price: double.parse(_formData['price'].toString()),
-      imageUrl: _formData['imageUrl'].toString(),
-    );
-
     Provider.of<ProductList>(
       context,
       listen: false,
-    ).addProduct(newProduct);
+    ).saveProduct(_formData);
 
     Navigator.of(context).pop();
   }
@@ -100,6 +114,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
+                initialValue: _formData['title']?.toString(),
                 decoration: InputDecoration(labelText: 'Nome'),
                 textInputAction: TextInputAction.next,
                 //sempre que o usuário chamar next
@@ -107,7 +122,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   //Vai para o próximo item
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
-                onSaved: (value) => _formData['titulo'] = value!,
+                onSaved: (value) => _formData['title'] = value!,
                 validator: (_name) {
                   final name = _name ?? '';
                   if (name.trim().isEmpty) {
@@ -120,6 +135,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 },
               ),
               TextFormField(
+                  initialValue: _formData['price']?.toString(),
                   decoration: InputDecoration(labelText: 'Preço'),
                   textInputAction: TextInputAction.next,
                   focusNode: _priceFocusNode,
@@ -141,6 +157,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     }
                   }),
               TextFormField(
+                initialValue: _formData['description']?.toString(),
                 decoration: InputDecoration(labelText: 'Descrição'),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/providers/orders.dart';
 import 'package:shop/views/cart_screen.dart';
 import 'package:shop/views/orders_screen.dart';
-import 'package:shop/views/product_form_screen.dart';
+import 'package:shop/views/product_form_page.dart';
 import 'package:shop/views/products_screen.dart';
 import './utils/app_routes.dart';
 import './views/product_detail_screen.dart';
