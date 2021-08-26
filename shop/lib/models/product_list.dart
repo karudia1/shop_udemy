@@ -1,17 +1,17 @@
-// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import, avoid_print, unused_local_variable, non_constant_identifier_names
+// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import, avoid_print, unused_local_variable, non_constant_identifier_names, unnecessary_string_interpolations
 
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop/data/dummy_data.dart';
 import '../models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final _baseUrl = 'https://shop-udemy-38dca-default-rtdb.firebaseio.com';
+  final _url =
+      'https://shop-udemy-38dca-default-rtdb.firebaseio.com/products.json';
 
-  List<Product> _items = dummyProducts.cast<Product>();
+  List<Product> _items = []; //dummyProducts.cast<Product>();
 
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -19,6 +19,32 @@ class ProductList with ChangeNotifier {
 
   int get itemsCount {
     return _items.length;
+  }
+
+  Future<void> loadProducts() async {
+    _items.clear();
+    final response = await http.get(Uri.parse(_url));
+
+    // ignore: unnecessary_null_comparison
+    if (response.body == 'null') {
+      return;
+    }
+
+    Map<String, dynamic> data = jsonDecode(response.body);
+
+    data.forEach((productId, productData) {
+      _items.add(
+        Product(
+          id: productId,
+          name: productData['name'],
+          description: productData['description'],
+          price: productData['price'],
+          imageUrl: productData['imageUrl'],
+          isFavorite: productData['isFavorite'],
+        ),
+      );
+    });
+    notifyListeners();
   }
 
   Future<void> saveProduct(Map<String, Object> data) {
@@ -44,7 +70,7 @@ class ProductList with ChangeNotifier {
     //salva os dados no firebase
     final response = await http.post(
       //para o firebase tem quer tem o final com .json, se não não vai funcionar
-      Uri.parse('$_baseUrl/products.json'),
+      Uri.parse(_url),
       body: jsonEncode(
         {
           "name": product.name,
