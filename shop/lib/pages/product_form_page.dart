@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -215,9 +215,13 @@ class _ProductFormPageState extends State<ProductFormPage> {
                     alignment: Alignment.center,
                     child: _imageUrlController.text.isEmpty
                         ? Text('Informe a Url')
-                        : FittedBox(
-                            child: Image.network(_imageUrlController.text),
-                            fit: BoxFit.cover,
+                        : Container(
+                            width: 100,
+                            height: 100,
+                            child: FittedBox(
+                              child: Image.network(_imageUrlController.text),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                   ),
                 ],

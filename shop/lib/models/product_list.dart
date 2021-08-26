@@ -1,13 +1,16 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../data/dummy_data.dart';
+import 'package:http/http.dart' as http;
+import 'package:shop/data/dummy_data.dart';
 import '../models/product.dart';
 
 class ProductList with ChangeNotifier {
-  //List<Product> _items = dummyProducts;
+  final _baseUrl = 'https://shop-udemy-38dca-default-rtdb.firebaseio.com';
+
   List<Product> _items = dummyProducts.cast<Product>();
 
   List<Product> get items => [..._items];
@@ -37,6 +40,20 @@ class ProductList with ChangeNotifier {
   }
 
   void addProduct(Product product) {
+    //salva os dados no firebase
+    http.post(
+        //para o firebase tem quer tem o final com .json, se não não vai funcionar
+        Uri.parse('$_baseUrl/products.json'),
+        body: jsonEncode(
+          {
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "imageUrl": product.imageUrl,
+            "isFavorite": product.isFavorite,
+          },
+        ));
+    //Salva os dados em memória
     _items.add(product);
     notifyListeners();
   }
