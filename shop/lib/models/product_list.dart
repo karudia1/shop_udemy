@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import, avoid_print, unused_local_variable
+// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import, avoid_print, unused_local_variable, non_constant_identifier_names
 
 import 'dart:convert';
 import 'dart:math';
@@ -21,7 +21,7 @@ class ProductList with ChangeNotifier {
     return _items.length;
   }
 
-  void saveProduct(Map<String, Object> data) {
+  Future<void> saveProduct(Map<String, Object> data) {
     bool hasId = data['id'] != null;
 
     final product = Product(
@@ -33,13 +33,13 @@ class ProductList with ChangeNotifier {
     );
 
     if (hasId) {
-      updateProduct(product);
+      return updateProduct(product);
     } else {
-      addProduct(product);
+      return addProduct(product);
     }
   }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     //salva os dados no firebase
     final future = http.post(
       //para o firebase tem quer tem o final com .json, se não não vai funcionar
@@ -54,7 +54,8 @@ class ProductList with ChangeNotifier {
         },
       ),
     );
-    future.then((response) {
+
+    return future.then<void>((response) {
       //teste do que é retornado
       print(jsonDecode(response.body)); // retorna o id
 
@@ -75,13 +76,15 @@ class ProductList with ChangeNotifier {
     });
   }
 
-  void updateProduct(Product product) {
+  Future<void> updateProduct(Product product) {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
       _items[index] = product;
       notifyListeners();
     }
+
+    return Future.value();
   }
 
   void removeProduct(Product product) {
