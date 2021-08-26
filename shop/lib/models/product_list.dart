@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import
+// ignore_for_file: prefer_final_fields, prefer_const_declarations, unused_import, avoid_print, unused_local_variable
 
 import 'dart:convert';
 import 'dart:math';
@@ -41,21 +41,38 @@ class ProductList with ChangeNotifier {
 
   void addProduct(Product product) {
     //salva os dados no firebase
-    http.post(
-        //para o firebase tem quer tem o final com .json, se não não vai funcionar
-        Uri.parse('$_baseUrl/products.json'),
-        body: jsonEncode(
-          {
-            "name": product.name,
-            "description": product.description,
-            "price": product.price,
-            "imageUrl": product.imageUrl,
-            "isFavorite": product.isFavorite,
-          },
-        ));
-    //Salva os dados em memória
-    _items.add(product);
-    notifyListeners();
+    final future = http.post(
+      //para o firebase tem quer tem o final com .json, se não não vai funcionar
+      Uri.parse('$_baseUrl/products.json'),
+      body: jsonEncode(
+        {
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+          "isFavorite": product.isFavorite,
+        },
+      ),
+    );
+    future.then((response) {
+      //teste do que é retornado
+      print(jsonDecode(response.body)); // retorna o id
+
+      //pegar o id retornada
+      final id = jsonDecode(response.body)['name'];
+
+      //Depois da resposta do firebase
+      //Salva os dados em memória
+      _items.add(Product(
+        id: id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        isFavorite: product.isFavorite,
+      ));
+      notifyListeners();
+    });
   }
 
   void updateProduct(Product product) {
