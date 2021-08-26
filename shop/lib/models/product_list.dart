@@ -39,9 +39,10 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  Future<void> addProduct(Product product) {
+  // await vai esperar a resposta tem que ser async
+  Future<void> addProduct(Product product) async {
     //salva os dados no firebase
-    final future = http.post(
+    final response = await http.post(
       //para o firebase tem quer tem o final com .json, se não não vai funcionar
       Uri.parse('$_baseUrl/products.json'),
       body: jsonEncode(
@@ -55,25 +56,20 @@ class ProductList with ChangeNotifier {
       ),
     );
 
-    return future.then<void>((response) {
-      //teste do que é retornado
-      print(jsonDecode(response.body)); // retorna o id
+    //pegar o id retornada
+    final id = jsonDecode(response.body)['name'];
 
-      //pegar o id retornada
-      final id = jsonDecode(response.body)['name'];
-
-      //Depois da resposta do firebase
-      //Salva os dados em memória
-      _items.add(Product(
-        id: id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        isFavorite: product.isFavorite,
-      ));
-      notifyListeners();
-    });
+    //Depois da resposta do firebase
+    //Salva os dados em memória
+    _items.add(Product(
+      id: id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      isFavorite: product.isFavorite,
+    ));
+    notifyListeners();
   }
 
   Future<void> updateProduct(Product product) {

@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
@@ -72,7 +74,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return isValidUrl && endsWithFile;
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
@@ -83,11 +85,17 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     setState(() => _isLoading = true);
 
-    Provider.of<ProductList>(
-      context,
-      listen: false,
-    ).saveProduct(_formData).catchError((error) {
-      return showDialog(
+    try {
+      await Provider.of<ProductList>(
+        context,
+        listen: false,
+      ).saveProduct(_formData);
+
+       //só volta para a tela quando acabar de salvar ou editar o produto
+      Navigator.of(context).pop();
+      
+    } catch (error) {
+      await showDialog<void>(
         context: context,
         builder: (ctx) => AlertDialog(
           title: Text('Ocorreu um erro"!!'),
@@ -99,12 +107,10 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ],
         ),
       );
-    }).then((value) {
+    } finally {
       setState(() => _isLoading = false);
-
-      //só volta para a tela quando acabar de salvar ou editar o produto
-      Navigator.of(context).pop();
-    });
+     
+    }
   }
 
   @override
