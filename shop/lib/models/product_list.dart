@@ -5,12 +5,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop/exceptions/http_exception.dart';
+import 'package:shop/utils/constants.dart';
 import '../models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final _url =
-      'https://shop-udemy-38dca-default-rtdb.firebaseio.com/products.json';
-
+  
   List<Product> _items = []; //dummyProducts.cast<Product>();
 
   List<Product> get items => [..._items];
@@ -23,7 +23,9 @@ class ProductList with ChangeNotifier {
 
   Future<void> loadProducts() async {
     _items.clear();
-    final response = await http.get(Uri.parse(_url));
+    final response = await http.get(
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
+    );
 
     // ignore: unnecessary_null_comparison
     if (response.body == 'null') {
@@ -70,7 +72,7 @@ class ProductList with ChangeNotifier {
     //salva os dados no firebase
     final response = await http.post(
       //para o firebase tem quer tem o final com .json, se não não vai funcionar
-      Uri.parse(_url),
+      Uri.parse('${Constants.PRODUCT_BASE_URL}.json'),
       body: jsonEncode(
         {
           "name": product.name,
@@ -98,10 +100,23 @@ class ProductList with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) {
+  Future<void> updateProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
+      await http.patch(
+        //para o firebase tem quer tem o final com .json, se não não vai funcionar
+        //passagem do id para fazer update
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
+        body: jsonEncode(
+          {
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "imageUrl": product.imageUrl,
+          },
+        ),
+      );
       _items[index] = product;
       notifyListeners();
     }
@@ -109,12 +124,34 @@ class ProductList with ChangeNotifier {
     return Future.value();
   }
 
-  void removeProduct(Product product) {
+  Future<void> removeProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
-      _items.removeWhere((p) => p.id == product.id);
+      //obtenho o produto
+      final product = _items[index];
+
+      // exclui do local
+      _items.remove(product);
       notifyListeners();
+
+      //manda a requisição para o servidor
+      final response = await http.delete(
+        //para o firebase tem quer tem o final com .json, se não não vai funcionar
+        //passagem do id para remover o produto
+        Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
+      );
+
+      //Se tiver algum erro retorna o produto para a lista
+      //Erro 400 é do lado do cliente e o 500 é do lado do servidor
+      if (response.statusCode >= 400) {
+        _items.insert(index, product);
+        notifyListeners();
+        throw HttpException(
+          msg: 'Não possível excluir o produto.',
+          statusCode: response.statusCode,
+        );
+      }
     }
   }
 }

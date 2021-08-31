@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
