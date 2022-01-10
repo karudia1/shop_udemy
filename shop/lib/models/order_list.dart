@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, unused_local_variable
 
 import 'dart:convert';
 import 'dart:math';
@@ -83,7 +83,7 @@ class OrderList with ChangeNotifier {
     );
 
     //pegar o id retornada
-    final id = jsonDecode(response.body)['name'];
+    //final id = jsonDecode(response.body)['name'];
 
     _items.insert(
       0,

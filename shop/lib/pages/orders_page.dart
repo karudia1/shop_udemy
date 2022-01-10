@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_field
+// ignore_for_file: prefer_const_constructors, unused_field, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,14 +7,11 @@ import 'package:shop/components/order.dart';
 import 'package:shop/models/order_list.dart';
 
 class OrdersPage extends StatelessWidget {
-  const OrdersPage({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Meus pedidos'),
-        backgroundColor: Colors.purple,
+        title: Text('Meus Pedidos'),
       ),
       drawer: AppDrawer(),
       body: FutureBuilder(
@@ -24,10 +21,10 @@ class OrdersPage extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.error != null) {
             return Center(
-              child: Text('Ocorreu um erro!!'),
+              child: Text('Ocorreu um erro!'),
             );
           } else {
-            Consumer<OrderList>(
+            return Consumer<OrderList>(
               builder: (ctx, orders, child) => ListView.builder(
                 itemCount: orders.itemsCount,
                 itemBuilder: (ctx, i) => OrderWidget(order: orders.items[i]),
@@ -36,6 +33,7 @@ class OrdersPage extends StatelessWidget {
           }
         },
       ),
+
       /*  body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
